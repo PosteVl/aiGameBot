@@ -1,0 +1,59 @@
+#!/bin/bash
+
+let max=5
+let min=0
+
+jar cfe ../out/artifacts/MancalaAgent_jar/MancalaAgent.jar MKAgent.Main MKAgent
+
+for i in {1..5}
+do
+     for j in {1..5}
+     do
+       for k in {1..5}
+       do
+         for l in {1..5}
+         do
+           for m in {1..5}
+           do
+
+             let z1=$i-1
+               let z2=$j-1
+               let z3=$k-1
+               let z4=$l-1
+               let z5=$m-1
+
+               cd ../
+               java -jar ManKalah.jar "java -jar out/artifacts/MancalaAgent_jar/MancalaAgent.jar" "java -jar src/MancalaAgent.jar"
+               sed -i "s/mancalaWeight = $z1/mancalaWeight = $i/" src/MKAgent/BoardEvaluator.java
+               sed -i "s/holesWeight = $z2/holesWeight = $j/" src/MKAgent/BoardEvaluator.java
+               sed -i "s/additionalMoveWeight = $z3/additionalMoveWeight = $k/" src/MKAgent/BoardEvaluator.java
+               sed -i "s/ourPercentageWeight = $z4/ourPercentageWeight = $l/" src/MKAgent/BoardEvaluator.java
+               sed -i "s/enemyPercentageWeight = $z5/enemyPercentageWeight = $m/" src/MKAgent/BoardEvaluator.java
+
+               javac src/MKAgent/*.java
+               cd src/
+               jar cfe ../out/artifacts/MancalaAgent_jar/MancalaAgent.jar MKAgent.Main MKAgent
+
+          done
+
+          sed -i "s/enemyPercentageWeight = $max/enemyPercentageWeight = $min/" MKAgent/BoardEvaluator.java
+          javac MKAgent/*.java
+          jar cfe ../out/artifacts/MancalaAgent_jar/MancalaAgent.jar MKAgent.Main MKAgent
+
+       done
+
+       sed -i "s/ourPercentageWeight = $max/ourPercentageWeight = $min/" MKAgent/BoardEvaluator.java
+       javac MKAgent/*.java
+       jar cfe ../out/artifacts/MancalaAgent_jar/MancalaAgent.jar MKAgent.Main MKAgent
+
+       done
+       sed -i "s/additionalMoveWeight = $max/additionalMoveWeight = $min/" MKAgent/BoardEvaluator.java
+       javac MKAgent/*.java
+       jar cfe ../out/artifacts/MancalaAgent_jar/MancalaAgent.jar MKAgent.Main MKAgent
+
+       done
+
+       sed -i "s/holesWeight = $max/holesWeight = $min/" MKAgent/BoardEvaluator.java
+       javac MKAgent/*.java
+       jar cfe ../out/artifacts/MancalaAgent_jar/MancalaAgent.jar MKAgent.Main MKAgent
+done
